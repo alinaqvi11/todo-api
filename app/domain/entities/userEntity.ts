@@ -20,7 +20,7 @@ class UserEntity {
         body.name, 
         body.email, 
         body.password
-        );    
+   );   
   };
   static createFromObject = (obj:any) => {
     return new UserEntity(

@@ -1,6 +1,6 @@
 import validator from 'validatorjs'
 class UserValidation {
-  static signUp = (req : any) => {
+  static addUser = (req : any) => {
     const body = req.body;
     const rules = {
       name: "required|string",

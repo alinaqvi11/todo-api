@@ -19,8 +19,8 @@ class TodoEntity {
         todoId, 
         userId, 
         body.name, 
-        body.description
-        );
+        body.description        
+    );
   };
   static createFromObject = (obj:any) => {
     return new TodoEntity(
