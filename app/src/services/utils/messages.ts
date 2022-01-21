@@ -7,9 +7,8 @@ export const statusCode = {
 export const message = {
     NOT_FOUND : 'ID Not Exist',
     SERVER_ERROR : 'Internal Server Error',
-    SUCCESS : ['Successfully Added','Successfully Deleted','Successfully Updated'],
+    SUCCESS : ['Successfully Added','Successfully Deleted','Successfully Updated','Successfully Log In'],
     NOT_EMAIL : 'Email Not Exist',
-    LOG_IN : 'Successfully Log In',
     INVALID : 'Invalid Email or Password',
     ALREADY_TAKEN : 'Email Already Taken'
 }

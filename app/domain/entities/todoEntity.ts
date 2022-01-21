@@ -6,6 +6,7 @@ class TodoEntity {
   userId : string;
   name: string;
   description: string;
+  
 
   constructor(todoId:string,userId:string,name:string, description:string) {
     this.todoId = todoId;
@@ -13,8 +14,7 @@ class TodoEntity {
     this.name = name;
     this.description = description;
   }
-  static createFromInput = (userId:string,body:any) => {
-    const todoId = uuidv4();
+  static createFromInput = (todoId:string,userId:string,body:any) => {
     return new TodoEntity(
         todoId, 
         userId, 
@@ -27,8 +27,8 @@ class TodoEntity {
       obj.todoId,
       obj.userId,
       obj.name,
-      obj.description
-    );    
+      obj.description,
+    );
   };
 }
 export default TodoEntity;

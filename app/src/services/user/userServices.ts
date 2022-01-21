@@ -24,7 +24,7 @@ class UserServices implements userInterface {
       return user;
     } catch (err) {
       console.log(err);
-      return message.SERVER_ERROR,statusCode.SERVER_ERROR
+      return {message: message.SERVER_ERROR,statusCode: statusCode.SERVER_ERROR};
     }
   };
   static logInUser = async (req : any) => {
@@ -36,17 +36,17 @@ class UserServices implements userInterface {
     });
    if (user && user.password === req.body.password) {
       req.session.userId = user.id;
-      return message.LOG_IN;
+      return {message : message.SUCCESS[3], statusCode : statusCode.SUCCESS};
       } 
     if (!user){
-      return message.NOT_EMAIL;
+      return {message : message.NOT_EMAIL, statusCode : statusCode.NOT_FOUND};
     }
   else{
-      return message.INVALID;
+    return {message : message.INVALID, statusCode : statusCode.NOT_FOUND};
       }
   }catch (err) {
     console.log(err);
-    return message.SERVER_ERROR,statusCode.SERVER_ERROR; 
+    return {message: message.SERVER_ERROR,statusCode: statusCode.SERVER_ERROR};
   }
 };
 static addUser = async (req : any) => {
@@ -61,17 +61,17 @@ static addUser = async (req : any) => {
           },
         });
         if (oneUser) {
-         return message.ALREADY_TAKEN;
+         return {message : message.ALREADY_TAKEN,statusCode : statusCode.NOT_FOUND};
         } else {
           const body = req.body;
           const dtoUser = userEntity.createFromInput(body);
           const daoUser = await User.create(dtoUser);
-          return message.SUCCESS[0];
+          return {message : message.SUCCESS[0],statusCode : statusCode.SUCCESS};
         }
       }
     } catch (err) {
       console.log(err);
-      return message.SERVER_ERROR,statusCode.SERVER_ERROR;
+      return {message: message.SERVER_ERROR,statusCode: statusCode.SERVER_ERROR};
     }
   };
 
