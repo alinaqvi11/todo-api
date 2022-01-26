@@ -1,7 +1,7 @@
 import validator from 'validatorjs'
 
 class UserValidation {
-  addUser = (req :any) => {
+  static addUser = (req :any) => {
     const body = req.body;
     console.log(body);
     const rules = {
@@ -14,4 +14,4 @@ class UserValidation {
   };
 }
 
-export default new UserValidation();
+export default  UserValidation;
