@@ -16,6 +16,7 @@ class UserRepository implements UserInterface {
       },
     });
   }
+  
   async addUser(user: UserEntity): Promise<any> {
     return await User.create(user);
   }
