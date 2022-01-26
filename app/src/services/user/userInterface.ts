@@ -1,7 +1,9 @@
+import UserEntity from "../../../domain/entities/userEntity";
+
 interface UserInterface {
-    getUsers() : any;
-    logInUser(req : any) : any;
-    addUser(req : any) :any;
+    getUsers(size: number, page: number) : Promise<any>;
+    getUser(email:string) : Promise<any>;
+    addUser(user:UserEntity) : Promise<any>;
 }
 
 export default UserInterface;

@@ -2,14 +2,13 @@ import todoServices from "../../src/services/todo/todoServices";
 
 class TodoController {
   static getTodos = async (req: any, res: any) => {
-    const todos = await todoServices.getTodos();
-    res.status(200).send(todos);
+    const todos = await todoServices.getTodos(req);
+    res.status(todos.statusCode).send(todos);
   };
 
   static getTodoById = async (req: any, res: any) => {
-    const id: string = req.params.id;
-    const todo:any = await todoServices.getTodoById(id);
-    res.status(200).send(todo);
+    const todo:any = await todoServices.getTodoById(req);
+    res.status(todo.statusCode).send(todo);
   };
 
   static addTodo = async (req: any, res: any) => {

@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 class UserEntity {
 
   id: string;
@@ -13,8 +11,7 @@ class UserEntity {
     this.email = email;
     this.password = password;
   }
-  static createFromInput = (body : any) => {
-    const id = uuidv4();
+  static createFromInput = (id:string,body : any) => {
    return new UserEntity(
         id, 
         body.name, 

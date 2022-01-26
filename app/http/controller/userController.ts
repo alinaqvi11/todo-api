@@ -2,12 +2,12 @@ import userServices from "../../src/services/user/userServices";
 
 class UserController {
   static getUsers = async (req: any, res: any) => {
-    const user:any = await userServices.getUsers();
-    res.status(200).send(user);
+    const user:any = await userServices.getUsers(req);
+    res.status(user.statusCode).send(user);
   };
 
-  static logInUser = async (req: any, res: any) => {
-    const user:any = await userServices.logInUser(req);
+  static getUser = async (req: any, res: any) => {
+    const user:any = await userServices.getUser(req);
     res.status(user.statusCode).send(user);
   };
 

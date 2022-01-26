@@ -1,77 +1,64 @@
-import User from "../../../infrastructure/model/userModel";
 import userValidation from "./validation/userValidation";
 import userEntity from "../../../domain/entities/userEntity";
-import userInterface from "./userInterface";
 import {statusCode,message} from '../../services/utils/messages'
+import { v4 as uuidv4 } from 'uuid';
+import UserRepository from "../../../infrastructure/repositories/user/userRepository";
+import MyAppError from "../../../http/Errors/appErrors";
 
-class UserServices implements userInterface {
-  getUsers() {
-    throw new Error("Method not implemented.");
-  }
-  logInUser(req: any) {
-    throw new Error("Method not implemented.");
-  }
-  addUser(req: any) {
-    throw new Error("Method not implemented.");
-  }
+class UserServices  {
   
-  static getUsers = async () => {
+  static getUsers = async (req : any) => {
     try {
-      const users = await User.findAll();
+      const size = parseInt(req.query.size);
+      const page =parseInt (req.query.page);
+      const users:any = await UserRepository.getUsers(size,page);
       const user = users.map((value: any) => {
         return userEntity.createFromObject(value);
       });
-      return user;
+      return new MyAppError(statusCode.SUCCESS,user);
     } catch (err) {
       console.log(err);
-      return {message: message.SERVER_ERROR,statusCode: statusCode.SERVER_ERROR};
+      return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR,);
     }
   };
-  static logInUser = async (req : any) => {
+  static getUser = async (req : any) => {
   try {
-    const user:any = await User.findOne({
-      where: {
-        email: req.body.email,
-      },
-    });
+    const user:any = await UserRepository.getUser(req.body.email)
    if (user && user.password === req.body.password) {
       req.session.userId = user.id;
-      return {message : message.SUCCESS[3], statusCode : statusCode.SUCCESS};
+      return new MyAppError(statusCode.SUCCESS,message.SUCCESS[3],);
       } 
     if (!user){
-      return {message : message.NOT_EMAIL, statusCode : statusCode.NOT_FOUND};
+      return new MyAppError(statusCode.UNAUTHORIZED,message.NOT_EMAIL);
     }
   else{
-    return {message : message.INVALID, statusCode : statusCode.NOT_FOUND};
+    return new MyAppError(statusCode.UNAUTHORIZED,message.INVALID);
       }
   }catch (err) {
     console.log(err);
-    return {message: message.SERVER_ERROR,statusCode: statusCode.SERVER_ERROR};
+    return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR);;
   }
 };
 static addUser = async (req : any) => {
     try {
       const validationBody = userValidation.addUser(req);
       if (validationBody.fails()) {
-        return validationBody.errors.all();
+        return {statusCode : statusCode.UNAUTHORIZED,errors : validationBody.errors.all()};
       } else {
-        const oneUser = await User.findOne({
-          where: {
-            email: req.body.email,
-          },
-        });
+        const oneUser:any = await UserRepository.getUser(req.body.email)
         if (oneUser) {
-         return {message : message.ALREADY_TAKEN,statusCode : statusCode.NOT_FOUND};
+          return new MyAppError(statusCode.SUCCESS,message.ALREADY_TAKEN,);
         } else {
           const body = req.body;
-          const dtoUser = userEntity.createFromInput(body);
-          const daoUser = await User.create(dtoUser);
-          return {message : message.SUCCESS[0],statusCode : statusCode.SUCCESS};
+          const id = uuidv4();
+          const dtoUser = userEntity.createFromInput(id,body);
+          const daoUser = await UserRepository.addUser(dtoUser);
+          return new MyAppError(statusCode.CREATED,message.SUCCESS[0]);
         }
       }
     } catch (err) {
       console.log(err);
-      return {message: message.SERVER_ERROR,statusCode: statusCode.SERVER_ERROR};
+      return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR);
     }
   };
 
