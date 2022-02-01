@@ -4,8 +4,7 @@ class MyAppError extends Error {
     constructor(statusCode: any,messages: any){
         super(messages);
         this.statusCode = statusCode;
-        this.messages = messages;
-        
+        this.messages = messages;        
     }
 }
 

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import TodoRepository from "../../../infrastructure/repositories/todo/todoRespository";
 import MyAppError from "../../../http/errors/myAppError";
 
+
 class TodoServices  {
   
   static getTodos = async (req:any) => {
@@ -14,7 +15,8 @@ class TodoServices  {
       const todo = todos.map((value: any) => {
         return todoEntity.createFromObject(value);      
       });
-      return new MyAppError(statusCode.SUCCESS,todo);
+      return {statusCode : statusCode.SUCCESS,data : todo};
+    
     } catch (err) {
       console.log(err);    
       return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR);   
@@ -26,7 +28,7 @@ class TodoServices  {
       const todo = await TodoRepository.getTodoById(id);
       if (!todo) {
         return new MyAppError(statusCode.NOT_FOUND,message.NOT_FOUND);
-      } else return new MyAppError(statusCode.SUCCESS,todoEntity.createFromObject(todo));
+      } else return {statusCode:statusCode.SUCCESS,data : todoEntity.createFromObject(todo)};
     } catch (err) {
       console.log(err);
       return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR); 
@@ -34,13 +36,13 @@ class TodoServices  {
   };
   static addTodo = async (req:any) => {
     try {  
-      const body = req.body;
-      const userId:string = req.session.userId; 
+      const body = req.body; 
       const todoId = uuidv4();  
-      const dtoTodo = todoEntity.createFromInput(todoId,userId,body);
+      const dtoTodo = todoEntity.createFromInput(todoId,body);
       const daoTodo = await TodoRepository.addTodo(dtoTodo)
-      return new MyAppError(statusCode.CREATED,message.SUCCESS[0]);
-    } catch (err) {
+      return {statusCode:statusCode.CREATED,message : message.SUCCESS[0]};
+      }
+     catch (err) {
       console.log(err);
       return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR); 
     }
@@ -48,13 +50,12 @@ class TodoServices  {
   static updateTodo = async (req:any) => {
     try {    
       const body = req.body;
-      const userId = req.session.userId;
       const todoId = req.params.id;
-      const dtoTodo = todoEntity.createFromInput(todoId,userId,body);   
+      const dtoTodo = todoEntity.createFromInput(todoId,body);   
       const daoTodo = await TodoRepository.updateTodo(dtoTodo);         
       if (!daoTodo) {
         return new MyAppError(statusCode.NOT_FOUND,message.NOT_FOUND);
-      } else return new MyAppError(statusCode.SUCCESS,message.SUCCESS[2]); 
+      } else return {statusCode : statusCode.SUCCESS,message :message.SUCCESS[2]}; 
     } catch (err) {
       console.log(err);
       return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR); 
@@ -62,10 +63,10 @@ class TodoServices  {
   };
   static deleteTodo = async (req: any) => {
     try {
-      const todo = await TodoRepository.deleteTodo(req.params.id,req.session.userId)
+      const todo = await TodoRepository.deleteTodo(req.params.id,req.body.userId)
       if (!todo) {
         return new MyAppError(statusCode.NOT_FOUND,message.NOT_FOUND);
-      } else return new MyAppError(statusCode.SUCCESS,message.SUCCESS[1]);
+      } else return {statusCode : statusCode.SUCCESS,message : message.SUCCESS[1]};
     } catch (err) {
       console.log(err);
       return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR); 

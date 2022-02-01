@@ -1,9 +1,10 @@
 class TodoEntity {
-
+  
   todoId: string;
   userId : string;
   name: string;
   description: string;
+  
   
 
   constructor(todoId:string,userId:string,name:string, description:string) {
@@ -12,10 +13,10 @@ class TodoEntity {
     this.name = name;
     this.description = description;
   }
-  static createFromInput = (todoId:string,userId:string,body:any) => {
+  static createFromInput = (todoId:string,body:any) => {
     return new TodoEntity(
         todoId, 
-        userId, 
+        body.userId, 
         body.name, 
         body.description        
     );
