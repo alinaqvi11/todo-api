@@ -1,5 +1,4 @@
 class TodoEntity {
-  
   todoId: string;
   userId : string;
   name: string;

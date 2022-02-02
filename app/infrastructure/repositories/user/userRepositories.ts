@@ -1,24 +1,24 @@
-import UserEntity from "../../../domain/entities/userEntity";
-import User from "../../database/model/userModel";
-import UserInterface from "../../../src/services/user/userInterface";
-
-class UserRepository implements UserInterface {
-  async getUsers(size: number, page: number): Promise<any> {
-    return await User.findAll({
-      limit: size,
-      offset: page * size,
+import userEntity from "../../../domain/entities/userEntity";
+import userModel from "../../database/model/userModel";
+import userInterface from "../../../application/services/user/userInterface";
+import Pagination from "../../../application/services/utils/pagination";
+class UserRepository implements userInterface {
+  async getUsers(pagination:Pagination): Promise<any> {
+    return await userModel.findAll({
+      limit: pagination.limit(),
+      offset: pagination.offset(),
     });
   }
   async getUser(email: string): Promise<any> {
-    return await User.findOne({
+    return await userModel.findOne({
       where: {
         email: email,
       },
     });
   }
   
-  async addUser(user: UserEntity): Promise<any> {
-    return await User.create(user);
+  async addUser(user: userEntity): Promise<any> {
+    return await userModel.create(user);
   }
 }
 

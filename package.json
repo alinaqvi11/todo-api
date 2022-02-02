@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.ts",
+  "bin": {
+    "TODO-API": "server.ts"
+  },
   "scripts": {
-    "start": "nodemon server.ts",
+    "start": "nodemon ./bin/server.ts",
     "build": "tsc -p ."
   },
   "author": "ali",

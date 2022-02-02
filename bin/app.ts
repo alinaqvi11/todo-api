@@ -10,11 +10,11 @@ app.use(session({
     saveUninitialized:false,
     resave: false 
   }));
-import todoRoutes from './app/http/routes/todoRoutes';
-app.use('/api',todoRoutes);
+import todoRoute from '../http/routes/todoRoutes';
+app.use('/api',todoRoute);
 
-import  userRoutes from'./app/http/routes/userRoutes';
-app.use('/api',userRoutes);
+import  userRoute from'../http/routes/userRoutes';
+app.use('/api',userRoute);
 
 
 export default app;
