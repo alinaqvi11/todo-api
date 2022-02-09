@@ -1,7 +1,7 @@
 import userEntity from "../../../domain/entities/userEntity";
 import userModel from "../../database/model/userModel";
-import userInterface from "../../../application/services/user/userInterface";
-import Pagination from "../../../application/services/utils/pagination";
+import userInterface from "../../../application/user/userInterface";
+import Pagination from "../../../application/utils/pagination";
 class UserRepository implements userInterface {
   async getUsers(pagination:Pagination): Promise<any> {
     return await userModel.findAll({

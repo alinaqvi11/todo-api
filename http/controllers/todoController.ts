@@ -1,29 +1,29 @@
-import todoService from "../../app/application/services/todo/todoServices";
-
+import todoService from "../../app/application/todo/todoServices";
+import HttpResponse from "../../app/application/utils/httpResponse";
 class TodoController {
    static getTodos = async (req: any, res: any) => {
     const todos:any = await todoService.getTodos(req);
-    res.status(todos.statusCode).send(todos);
+    HttpResponse.convertToExpress(res, todos); 
   };
 
   static getTodoById = async (req: any, res: any) => {
     const todo:any = await todoService.getTodoById(req);
-    res.status(todo.statusCode).send(todo);
+    HttpResponse.convertToExpress(res, todo); 
   };
 
   static addTodo = async (req: any, res: any) => {
     const todo:any = await todoService.addTodo(req);
-    res.status(todo.statusCode).send(todo);
+    HttpResponse.convertToExpress(res, todo);
   };
 
   static updateTodo = async (req: any, res: any) => {
     const todo:any = await todoService.updateTodo(req);
-    res.status(todo.statusCode).send(todo);
+    HttpResponse.convertToExpress(res, todo);
   };
 
   static deleteTodo = async (req: any, res: any) => {
     const todo: any = await todoService.deleteTodo(req);
-    res.status(todo.statusCode).send(todo);
+    HttpResponse.convertToExpress(res, todo)
   };
 }
 export default TodoController;

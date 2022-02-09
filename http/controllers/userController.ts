@@ -1,19 +1,19 @@
-import userService from "../../app/application/services/user/userServices";
-
+import userService from "../../app/application/user/userServices";
+import HttpResponse from "../../app/application/utils/httpResponse";
 class UserController {
   static getUsers = async (req: any, res: any) => {
-    const user:any = await userService.getUsers(req);
-    res.status(user.statusCode).send(user);
+    const users:any = await userService.getUsers(req);
+    HttpResponse.convertToExpress(res, users);
   };
 
   static getUser = async (req: any, res: any) => {
     const user:any = await userService.getUser(req);
-    res.status(user.statusCode).send(user);
+    HttpResponse.convertToExpress(res, user);
   };
 
   static addUser = async (req: any, res: any) => {
     const user:any = await userService.addUser(req);
-    res.status(user.statusCode).send(user);
+    HttpResponse.convertToExpress(res, user);
   };
 }
 

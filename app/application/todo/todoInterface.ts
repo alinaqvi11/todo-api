@@ -1,4 +1,4 @@
-import todoEntity from "../../../domain/entities/todoEntity";
+import todoEntity from "../../domain/entities/todoEntity";
 import Pagination from "../utils/pagination";
 
 interface TodoInterface {

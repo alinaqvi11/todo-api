@@ -1,5 +1,5 @@
 import {Sequelize} from 'sequelize';
-import db from './index';
+import db from '../config/index';
 const sequelize = new Sequelize(db.DB, db.USER, db.PASSWORD, {
     dialect: db.DIALECT,
     host: db.HOST

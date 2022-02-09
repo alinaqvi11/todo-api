@@ -1,4 +1,4 @@
-import userEntity from "../../../domain/entities/userEntity";
+import userEntity from "../../domain/entities/userEntity";
 import Pagination from "../utils/pagination";
 
 interface UserInterface {

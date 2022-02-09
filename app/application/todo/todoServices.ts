@@ -1,9 +1,9 @@
-import todoEntity from "../../../domain/entities/todoEntity";
-import { statusCode, message } from "../../services/utils/messages";
+import todoEntity from "../../domain/entities/todoEntity";
 import { v4 as uuidv4 } from "uuid";
-import TodoRepository from "../../../infrastructure/repositories/todo/todoRespository";
+import TodoRepository from "../../infrastructure/repositories/todo/todoRespository";
 import Pagination from "../utils/pagination";
-
+import HttpResponse from "../utils/httpResponse";
+import {statusCode,respMessage} from "../utils/httpStatus";
 class TodoService {
   static getTodos = async (req: any) => {
     try {
@@ -13,13 +13,10 @@ class TodoService {
       const todo = todos.map((value: any) => {
         return todoEntity.createFromObject(value);
       });
-      return { statusCode: statusCode.SUCCESS, data: todo };
+      return HttpResponse.create(statusCode.Ok, todo);
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
   static getTodoById = async (req: any) => {
@@ -27,18 +24,12 @@ class TodoService {
       const id: string = req.params.id;
       const todo = await TodoRepository.getTodoById(id);
       if (!todo) {
-        return { statusCode: statusCode.NOT_FOUND, message: message.NOT_FOUND };
+        return HttpResponse.create(statusCode.NOT_FOUND, respMessage.NOT_FOUND[0]); 
       } else
-        return {
-          statusCode: statusCode.SUCCESS,
-          data: todoEntity.createFromObject(todo),
-        };
+      return HttpResponse.create(statusCode.Ok, todo);
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
   static addTodo = async (req: any) => {
@@ -47,13 +38,10 @@ class TodoService {
       const todoId = uuidv4();
       const dtoTodo = todoEntity.createFromInput(todoId, body);
       const daoTodo = await TodoRepository.addTodo(dtoTodo);
-      return { statusCode: statusCode.CREATED, message: message.SUCCESS[0] };
+      return HttpResponse.create(statusCode.Ok, respMessage.Success[0]);
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
   static updateTodo = async (req: any) => {
@@ -63,15 +51,12 @@ class TodoService {
       const dtoTodo = todoEntity.createFromInput(todoId, body);
       const daoTodo = await TodoRepository.updateTodo(dtoTodo);
       if (!daoTodo) {
-        return { statusCode: statusCode.NOT_FOUND, message: message.NOT_FOUND };
+        return HttpResponse.create(statusCode.NOT_FOUND, respMessage.NOT_FOUND[0]);
       } else
-        return { statusCode: statusCode.SUCCESS, message: message.SUCCESS[2] };
+      return HttpResponse.create(statusCode.Ok, respMessage.Success[2]);
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
   static deleteTodo = async (req: any) => {
@@ -81,15 +66,12 @@ class TodoService {
         req.body.userId
       );
       if (!todo) {
-        return { statusCode: statusCode.NOT_FOUND, message: message.NOT_FOUND };
+        return HttpResponse.create(statusCode.NOT_FOUND, respMessage.NOT_FOUND[0]);
       } else
-        return { statusCode: statusCode.SUCCESS, message: message.SUCCESS[1] };
+      return HttpResponse.create(statusCode.Ok, respMessage.Success[1]);
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
 }

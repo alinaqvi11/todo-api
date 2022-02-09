@@ -1,12 +1,13 @@
-import userValidation from "../../../domain/validation/userValidation";
-import userEntity from "../../../domain/entities/userEntity";
-import { statusCode, message } from "../../services/utils/messages";
+import userValidation from "../../domain/validation/userValidation";
+import userEntity from "../../domain/entities/userEntity";
+import {statusCode,respMessage} from "../utils/httpStatus";
 import { v4 as uuidv4 } from "uuid";
-import UserRepository from "../../../infrastructure/repositories/user/userRepositories";
+import UserRepository from "../../infrastructure/repositories/user/userRepositories";
 import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 import Pagination from "../utils/pagination";
 dotenv.config();
+import HttpResponse from "../utils/httpResponse";
 
 class UserService {
   static getUsers = async (req: any) => {
@@ -14,16 +15,15 @@ class UserService {
       const { size, page } = req.query;
       const pagination = new Pagination(parseInt(size), parseInt(page));
       const users: any = await UserRepository.getUsers(pagination);
+      console.log(users)
       const user = users.map((value: any) => {
         return userEntity.createFromObject(value);
       });
-      return { statusCode: statusCode.SUCCESS, data: user };
+      console.log(user,'123')
+      return HttpResponse.create(statusCode.Ok, user);
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
   static getUser = async (req: any) => {
@@ -31,61 +31,39 @@ class UserService {
       const user: any = await UserRepository.getUser(req.body.email);
       if (user && user.password === req.body.password) {
         const token = jwt.sign({ id: user.id }, "alihaseeb");
-        return { statusCode: statusCode.SUCCESS, message: message.SUCCESS[3] };
+        return HttpResponse.create(statusCode.Ok, respMessage.Success[3]);
       }
       if (!user) {
-        return {
-          statusCode: statusCode.UNAUTHORIZED,
-          message: message.NOT_EMAIL,
-        };
+        return HttpResponse.create(statusCode.NOT_FOUND, respMessage.NOT_FOUND[1]);
       } else {
-        return {
-          statusCode: statusCode.UNAUTHORIZED,
-          message: message.INVALID,
-        };
+        return HttpResponse.create(statusCode.ERROR, respMessage.INVALID);
       }
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
   static addUser = async (req: any) => {
     try {
       const validationBody = userValidation.addUser(req);
       if (validationBody.fails()) {
-        return {
-          statusCode: statusCode.UNAUTHORIZED,
-          errors: validationBody.errors.all(),
-        };
+        return HttpResponse.create(statusCode.ERROR, validationBody.errors.all());
       } else {
         const oneUser: any = await UserRepository.getUser(req.body.email);
         if (oneUser) {
-          return {
-            statusCode: statusCode.SUCCESS,
-            message: message.ALREADY_TAKEN,
-          };
+          return HttpResponse.create(statusCode.ALREADY_TAKEN, respMessage.ALREADY_TAKEN);
         } else {
           const body = req.body;
           const id = uuidv4();
           const dtoUser = userEntity.createFromInput(id, body);
           const daoUser = await UserRepository.addUser(dtoUser);
           const token = jwt.sign({ id: daoUser.id }, "alihaseeb");
-          return {
-            statusCode: statusCode.CREATED,
-            message: message.SUCCESS[0],
-            Token: token,
-          };
+          return HttpResponse.create(statusCode.Ok, respMessage.Success[0]);
         }
       }
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
 }

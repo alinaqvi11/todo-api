@@ -1,7 +1,7 @@
 import todoModel from "../../database/model/todoModel";
-import todoInterface from "../../../application/services/todo/todoServices";
+import todoInterface from "../../../application/todo/todoServices";
 import todoEntity from "../../../domain/entities/todoEntity";
-import Pagination from "../../../application/services/utils/pagination";
+import Pagination from "../../../application/utils/pagination";
 
 class TodoRepository implements todoInterface {
   async getTodos(pagination: Pagination): Promise<any> {
