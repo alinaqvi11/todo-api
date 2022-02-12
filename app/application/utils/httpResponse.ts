@@ -7,10 +7,9 @@ class HttpResponse {
         this.body = body;
     }
     static create(responseCode:any, body:any) {
-        if (responseCode === statusCode.SERVER_ERROR || responseCode === statusCode.NOT_FOUND || responseCode === statusCode.UNAUTHORIZED) {
-
+        if (responseCode === statusCode.SERVER_ERROR || responseCode === statusCode.NOT_FOUND || responseCode === statusCode.UNAUTHORIZED) {            
             return new HttpResponse(responseCode, {message: body});
-        }
+        }       
         return new HttpResponse(responseCode, body);
     }
 

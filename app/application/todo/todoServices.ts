@@ -35,6 +35,7 @@ class TodoService {
   static addTodo = async (req: any) => {
     try {
       const body = req.body;
+      body.userId = req.user;
       const todoId = uuidv4();
       const dtoTodo = todoEntity.createFromInput(todoId, body);
       const daoTodo = await TodoRepository.addTodo(dtoTodo);
@@ -61,10 +62,12 @@ class TodoService {
   };
   static deleteTodo = async (req: any) => {
     try {
+      console.log(req.user)
       const todo = await TodoRepository.deleteTodo(
         req.params.id,
-        req.body.userId
+        req.user
       );
+      console.log(todo)
       if (!todo) {
         return HttpResponse.create(statusCode.NOT_FOUND, respMessage.NOT_FOUND[0]);
       } else
