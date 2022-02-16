@@ -7,6 +7,7 @@ class HttpResponse {
         this.body = body;
     }
     static create(responseCode:any, body:any) {
+        console.log(body,'llllllll')
         if (responseCode === statusCode.SERVER_ERROR || responseCode === statusCode.NOT_FOUND || responseCode === statusCode.UNAUTHORIZED) {            
             return new HttpResponse(responseCode, {message: body});
         }       
@@ -14,7 +15,9 @@ class HttpResponse {
     }
 
     static convertToExpress(res:any, httpResponse:any) {
+        console.log(httpResponse.body)
         return res.status(httpResponse.statusCode).json(httpResponse.body);
+
     }
     
 }
