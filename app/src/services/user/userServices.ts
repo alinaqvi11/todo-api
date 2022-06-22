@@ -21,59 +21,25 @@ class UserServices {
       return new MyAppError(statusCode.SERVER_ERROR, message.SERVER_ERROR,);
     }
   };
-<<<<<<< HEAD
-  async getUser(req: any): Promise<any> {
+  static getUser = async (req: any) => {
     try {
-      const user: any = await User.findOne({
-        where: {
-          email: req.body.email,
-        },
-      });
+      const user: any = await UserRepository.getUser(req.body.email)
       if (user && user.password === req.body.password) {
         req.session.userId = user.id;
-        return { statusCode: statusCode.SUCCESS, message: message.SUCCESS[3] };
+        return new MyAppError(statusCode.SUCCESS, message.SUCCESS[3],);
       }
       if (!user) {
-        return {
-          statusCode: statusCode.UNAUTHORIZED,
-          message: message.NOT_EMAIL,
-        };
-      } else {
-        return {
-          statusCode: statusCode.UNAUTHORIZED,
-          message: message.INVALID,
-        };
+        return new MyAppError(statusCode.UNAUTHORIZED, message.NOT_EMAIL);
+      }
+      else {
+        return new MyAppError(statusCode.UNAUTHORIZED, message.INVALID);
       }
     } catch (err) {
       console.log(err);
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
+      return new MyAppError(statusCode.SERVER_ERROR, message.SERVER_ERROR);;
     }
   };
-  async addUser(req: any): Promise<any> {
-=======
-  static getUser = async (req : any) => {
-  try {
-    const user:any = await UserRepository.getUser(req.body.email)
-   if (user && user.password === req.body.password) {
-      req.session.userId = user.id;
-      return new MyAppError(statusCode.SUCCESS,message.SUCCESS[3],);
-      }
-    if (!user){
-      return new MyAppError(statusCode.UNAUTHORIZED,message.NOT_EMAIL);
-    }
-  else{
-    return new MyAppError(statusCode.UNAUTHORIZED,message.INVALID);
-      }
-  }catch (err) {
-    console.log(err);
-    return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR);;
-  }
-};
-static addUser = async (req : any) => {
->>>>>>> refactor-phase2
+  static addUser = async (req: any) => {
     try {
       const validationBody = userValidation.addUser(req);
       if (validationBody.fails()) {
@@ -92,8 +58,6 @@ static addUser = async (req : any) => {
       }
     } catch (err) {
       console.log(err);
-<<<<<<< HEAD
-<<<<<<< HEAD
       return new MyAppError(statusCode.SERVER_ERROR, message.SERVER_ERROR);
     }
   };
@@ -102,23 +66,4 @@ static addUser = async (req : any) => {
 
 }
 export default UserServices;
-=======
-      return {
-        statusCode: statusCode.SERVER_ERROR,
-        message: message.SERVER_ERROR,
-      };
-=======
-      return new MyAppError(statusCode.SERVER_ERROR,message.SERVER_ERROR);
->>>>>>> refactor-phase2
-    }
-  };
 
-
-
-}
-<<<<<<< HEAD
-export default new UserServices();
->>>>>>> refactor-phase1
-=======
-export default UserServices;
->>>>>>> refactor-phase2

@@ -45,13 +45,8 @@ class TodoServices {
       return new MyAppError(statusCode.SERVER_ERROR, message.SERVER_ERROR);
     }
   };
-<<<<<<< HEAD
-  async updateTodo(req: any): Promise<any> {
+  static updateTodo = async (req: any) => {
     try {
-=======
-  static updateTodo = async (req:any) => {
-    try {
->>>>>>> refactor-phase2
       const body = req.body;
       const userId = req.session.userId;
       const todoId = req.params.id;
@@ -78,12 +73,6 @@ class TodoServices {
   };
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 export default TodoServices;
-=======
-export default new TodoServices();
->>>>>>> refactor-phase1
-=======
-export default TodoServices;
->>>>>>> refactor-phase2
+
