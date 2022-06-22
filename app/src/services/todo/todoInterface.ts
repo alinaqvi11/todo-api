@@ -1,7 +1,7 @@
 import TodoEntity from "../../../domain/entities/todoEntity";
 
 interface TodoInterface {
-    getTodos(): Promise<any>;
+    getTodos(size: number, page: number): Promise<any>;
     getTodoById(id: string): Promise<any>;
     addTodo(todo: TodoEntity): Promise<any>;
     updateTodo(todo: TodoEntity): Promise<any>;
