@@ -1,37 +1,42 @@
-import Todo from "../../database/model/todoModel";
-import TodoInterface from "../../../src/services/todo/todoInterface";
-import TodoEntity from "../../../domain/entities/todoEntity";
-class TodoRepository implements TodoInterface {
-   async getTodos (size: number, page: number): Promise<any> {
-    return Todo.findAll({
-      limit: size,
-      offset : page * size,
-    })
-  };
+import todoModel from "../../database/model/todoModel";
+import todoInterface from "../../../application/todo/todoServices";
+import todoEntity from "../../../domain/entities/todoEntity";
+import Pagination from "../../../application/utils/pagination";
 
-  async getTodoById(id: string) : Promise<any> {
-    return await Todo.findOne({
+class TodoRepository implements todoInterface {
+  async getTodos(pagination: Pagination): Promise<any> {
+    return todoModel.findAll({
+      limit: pagination.limit(),
+      offset: pagination.offset(),
+    });
+  }
+
+  async getTodoById(id: string): Promise<any> {
+    return await todoModel.findOne({
       where: {
         todoId: id,
       },
     });
   }
-  async  addTodo(todo: TodoEntity) {
-    return await Todo.create(todo);
+  async addTodo(todo: todoEntity) {
+    return await todoModel.create(todo);
   }
-  async updateTodo(todo: TodoEntity) {
-    return await Todo.update({
-      name : todo.name,
-      description : todo.description, 
-    }, {
-      where: {
-        todoId: todo.todoId,
-        userId: todo.userId,
+  async updateTodo(todo: todoEntity) {
+    return await todoModel.update(
+      {
+        name: todo.name,
+        description: todo.description,
       },
-    });
+      {
+        where: {
+          todoId: todo.todoId,
+          userId: todo.userId,
+        },
+      }
+    );
   }
   async deleteTodo(todoId: any, userId: any) {
-    return await Todo.destroy({
+    return await todoModel.destroy({
       where: {
         todoId: todoId,
         userId: userId,
@@ -39,10 +44,5 @@ class TodoRepository implements TodoInterface {
     });
   }
 }
-  
-  
-
 
 export default new TodoRepository();
-
-
