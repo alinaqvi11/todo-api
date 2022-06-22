@@ -8,7 +8,7 @@ class TodoService {
   static getTodos = async (req: any) => {
     try {
       const { size, page } = req.query;
-      const pagination = new Pagination(parseInt(size), parseInt(page));
+      const pagination = new Pagination(size ? parseInt(size) : size, page ? parseInt(page) : page);
       const todos = await TodoRepository.getTodos(pagination);
       const todo = todos.map((value: any) => {
         return todoEntity.createFromObject(value);
@@ -22,7 +22,8 @@ class TodoService {
   static getTodoById = async (req: any) => {
     try {
       const id: string = req.params.id;
-      const todo = await TodoRepository.getTodoById(id);
+      const userId:string = req.user;
+      const todo = await TodoRepository.getTodoById(id,userId);
       if (!todo) {
         return HttpResponse.create(statusCode.NOT_FOUND, respMessage.NOT_FOUND[0]); 
       } else
@@ -35,6 +36,7 @@ class TodoService {
   static addTodo = async (req: any) => {
     try {
       const body = req.body;
+      body.userId = req.user;
       const todoId = uuidv4();
       const dtoTodo = todoEntity.createFromInput(todoId, body);
       const daoTodo = await TodoRepository.addTodo(dtoTodo);
@@ -47,6 +49,7 @@ class TodoService {
   static updateTodo = async (req: any) => {
     try {
       const body = req.body;
+      body.userId = req.user;
       const todoId = req.params.id;
       const dtoTodo = todoEntity.createFromInput(todoId, body);
       const daoTodo = await TodoRepository.updateTodo(dtoTodo);
@@ -63,7 +66,7 @@ class TodoService {
     try {
       const todo = await TodoRepository.deleteTodo(
         req.params.id,
-        req.body.userId
+        req.user
       );
       if (!todo) {
         return HttpResponse.create(statusCode.NOT_FOUND, respMessage.NOT_FOUND[0]);

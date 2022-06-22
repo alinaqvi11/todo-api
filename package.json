@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.12",
+    "bunyan": "^1.8.15",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
@@ -28,6 +29,7 @@
     "validatorjs": "^3.22.1"
   },
   "devDependencies": {
+    "@types/bunyan": "^1.8.8",
     "@types/express-session": "^1.17.4",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/uuid": "^8.3.4",

@@ -11,10 +11,11 @@ class TodoRepository implements todoInterface {
     });
   }
 
-  async getTodoById(id: string): Promise<any> {
+  async getTodoById(id: string,userId:string): Promise<any> {
     return await todoModel.findOne({
       where: {
         todoId: id,
+        userId: userId,
       },
     });
   }

@@ -15,6 +15,8 @@ class UserController {
     const user:any = await userService.addUser(req);
     HttpResponse.convertToExpress(res, user);
   };
+  
+  
 }
 
 export default  UserController;
