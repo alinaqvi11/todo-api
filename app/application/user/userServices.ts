@@ -10,8 +10,8 @@ import Pagination from "../utils/pagination";
 import HttpResponse from "../utils/httpResponse";
 
 
-class UserService   {
- 
+class UserService {
+
   static getUsers = async (req: any) => {
     try {
       const { size, page } = req.query;
@@ -20,7 +20,6 @@ class UserService   {
       const user = users.map((value: any) => {
         return userEntity.createFromObject(value);
       });
-      console.log(user, "123");
       return HttpResponse.create(statusCode.Ok, user);
     } catch (err) {
       console.log(err);
@@ -80,8 +79,8 @@ class UserService   {
       return HttpResponse.create(statusCode.SERVER_ERROR, err);
     }
   };
- 
-   
+
+
 }
 
 export default UserService;
